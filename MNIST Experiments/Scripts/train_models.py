@@ -7,12 +7,10 @@ from utils import data_generator
 from model import Transformer,TCN,LSTMWithInputCellAttention,LSTM
 import numpy as np
 import argparse
-
-
-
+import time
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-models=["TCN"]
+models=["Transformer", "TCN", "LSTMWithInputCellAttention", "LSTM"]
 
 def main(args):
 	torch.manual_seed(args.seed)
@@ -22,7 +20,8 @@ def main(args):
 
 
 	for m in range(len(models)):
-
+		print("*" * 80)
+		print("Start the training of {}".format(models[m]))
 
 		if(models[m]=="Transformer"):
 
@@ -48,7 +47,10 @@ def main(args):
 		lr=args.lr
 		optimizer = getattr(optim, args.optim)(model.parameters(), lr=lr)
 
+		epoch_time_sum = 0
+
 		best_test_loss=100
+		start_time = time.time()
 		for epoch in range(1, args.epochs+1):
 			model,optimizer = train(args,epoch,model,train_loader,optimizer)
 			test_loss,test_acc = test(args,model,test_loader)
@@ -61,6 +63,11 @@ def main(args):
 				lr /= 10
 				for param_group in optimizer.param_groups:
 					param_group['lr'] = lr
+		end_time = time.time()
+		total_time = end_time - start_time
+		time_message = ("Total training time: {:.2f} seconds, Average training time per epoch: {:.2f} seconds"
+						.format(total_time, total_time/args.epochs))
+		print(time_message)
 
 
 
