@@ -3,24 +3,30 @@ from torch.autograd import Variable
 import torch.optim as optim
 import torch.nn.functional as F
 import sys, os
-from utils import data_generator
+from utils import get_mixed_data
 from model import Transformer,TCN,LSTMWithInputCellAttention,LSTM
 import numpy as np
 import argparse
 import time
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-models=["Transformer", "TCN", "LSTMWithInputCellAttention", "LSTM"]
+
+models=["Transformer", "LSTM"]
 
 def main(args):
+	print('Train Transformer with {} layers, and LSTM with {} hidden units'.format(args.n_layers, args.nhid))
+
+	sys.stdout = open('../Models/train_{}_layer_{}_nhid_result.txt'.format(args.n_layers, args.nhid), 'w')
+
+	print('Train Transformer with {} layers, and LSTM with {} hidden units'.format(args.n_layers, args.nhid))
+
 	torch.manual_seed(args.seed)
 
-
-	train_loader, test_loader = data_generator(args.data_dir, args.batch_size)
+	train_loader, test_loader, train_noise, test_noise = get_mixed_data(args.batch_size)
 
 
 	for m in range(len(models)):
-		print("*" * 80)
+		print("*" * 100)
 		print("Start the training of {}".format(models[m]))
 
 		if(models[m]=="Transformer"):
@@ -68,6 +74,7 @@ def main(args):
 		time_message = ("Total training time: {:.2f} seconds, Average training time per epoch: {:.2f} seconds"
 						.format(total_time, total_time/args.epochs))
 		print(time_message)
+	sys.stdout.close()
 
 
 
@@ -84,6 +91,7 @@ def train(args,ep,model,train_loader,optimizer):
 
 	train_loss = 0
 	model.train()
+	correct = 0
 	for batch_idx, (data, target) in enumerate(train_loader):
 		data, target = data.to(device), target.to(device)
 
@@ -91,6 +99,8 @@ def train(args,ep,model,train_loader,optimizer):
 		data, target = Variable(data), Variable(target)
 		optimizer.zero_grad()
 		output = model(data)
+		pred = output.data.max(1, keepdim=True)[1]
+		correct += pred.eq(target.data.view_as(pred)).cpu().sum()
 		loss = F.nll_loss(output, target)
 		loss.backward()
 		if args.clip > 0:
@@ -103,6 +113,10 @@ def train(args,ep,model,train_loader,optimizer):
 				100. * batch_idx / len(train_loader), train_loss.item()/args.log_interval))
 			print(message)
 			train_loss = 0
+
+	Acc = 100. * correct / len(train_loader.dataset)
+	print('Train Accuracy: {}/{} ({:.2f}%\n'.format(correct, len(train_loader.dataset), Acc))
+
 	return model, optimizer
 
 
@@ -163,7 +177,7 @@ def parse_arguments(argv):
 	parser.add_argument('--seed', type=int, default=1111,
 						help='random seed (default: 1111)')
 
-	parser.add_argument('--n_classes', type=int, default=10)
+	parser.add_argument('--n_classes', type=int, default=9)
 
 
 	parser.add_argument('--data_dir', type=str, default="../Data/")
