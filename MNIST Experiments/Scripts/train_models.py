@@ -11,14 +11,14 @@ import time
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-models=["Transformer", "LSTM"]
+models=["Transformer"]
 
 def main(args):
-	print('Train Transformer with {} layers, and LSTM with {} hidden units'.format(args.n_layers, args.nhid))
+	print('Train Transformer with {} layers'.format(args.n_layers))
 
-	sys.stdout = open('../Models/train_{}_layer_{}_nhid_result.txt'.format(args.n_layers, args.nhid), 'w')
+	sys.stdout = open('../Models/train_{}_layer_result.txt'.format(args.n_layers), 'w')
 
-	print('Train Transformer with {} layers, and LSTM with {} hidden units'.format(args.n_layers, args.nhid))
+	print('Train Transformer with {} layers'.format(args.n_layers))
 
 	torch.manual_seed(args.seed)
 
@@ -115,7 +115,7 @@ def train(args,ep,model,train_loader,optimizer):
 			train_loss = 0
 
 	Acc = 100. * correct / len(train_loader.dataset)
-	print('Train Accuracy: {}/{} ({:.2f}%\n'.format(correct, len(train_loader.dataset), Acc))
+	print('Train Accuracy: {}/{} ({:.2f}%)\n'.format(correct, len(train_loader.dataset), Acc))
 
 	return model, optimizer
 
