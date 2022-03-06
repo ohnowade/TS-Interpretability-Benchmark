@@ -86,7 +86,7 @@ def start_random_train(args):
 
 	torch.manual_seed(args.seed)
 
-	train_loader, test_loader, train_noise, test_noise = data_generator_random_0_2(args.batch_size)
+	train_loader, test_loader, train_noise, test_noise = data_generator_random(args.batch_size)
 
 	for m in range(len(models)):
 		print("*" * 100)
@@ -159,7 +159,7 @@ def train(args,ep,model,train_loader,optimizer):
 		output = model(data)
 		pred = output.data.max(1, keepdim=True)[1]
 		correct += pred.eq(target.data.view_as(pred)).cpu().sum()
-		loss = F.cross_entropy(output, target)
+		loss = F.nll_loss(output, target)
 		loss.backward()
 		if args.clip > 0:
 			torch.nn.utils.clip_grad_norm_(model.parameters(), args.clip)

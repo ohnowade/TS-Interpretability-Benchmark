@@ -138,6 +138,20 @@ def get_mixed_data(batch_size):
 
 
 def data_generator_random_0_2(batch_size):
+    if (os.path.exists('../Data/MIXED/random_2_classes_train_dataset.pt') and
+        os.path.exists('../Data/MIXED/random_2_classes_test_dataset.pt') and
+        os.path.exists('../Data/MIXED/random_2_classes_train_noise.pt') and
+        os.path.exists('../Data/MIXED/random_2_classes_test_noise.pt')):
+        train_set = torch.load(open('../Data/MIXED/random_2_classes_train_dataset.pt', 'rb'))
+        test_set = torch.load(open('../Data/MIXED/random_2_classes_test_dataset.pt', 'rb'))
+        train_noise = torch.load(open('../Data/MIXED/random_2_classes_train_noise.pt', 'rb'))
+        test_noise = torch.load(open('../Data/MIXED/random_2_classes_test_noise.pt', 'rb'))
+
+        train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True)
+        test_loader = torch.utils.data.DataLoader(test_set, batch_size=batch_size)
+
+        return train_loader, test_loader, train_noise, test_noise
+
     train_set = datasets.MNIST('./data', train=True, download=True,
                                transform=transforms.Compose([
                                    transforms.ToTensor(),
@@ -213,10 +227,19 @@ def data_generator_random_0_2(batch_size):
 
     arr2 = np.array(new_test_targets)
     t2 = torch.from_numpy(arr2)
-    minst_test = torch.utils.data.TensorDataset(new_test_data, t2.type(torch.LongTensor))
+    mnist_test = torch.utils.data.TensorDataset(new_test_data, t2.type(torch.LongTensor))
+
+    with open('../Data/MIXED/random_2_classes_train_dataset.pt', "wb") as f:
+        torch.save(mnist_train, f)
+    with open('../Data/MIXED/random_2_classes_test_dataset.pt', "wb") as f:
+        torch.save(mnist_test, f)
+    with open('../Data/MIXED/random_2_classes_train_noise.pt', "wb") as f:
+        torch.save(new_train_noise, f)
+    with open('../Data/MIXED/random_2_classes_test_noise.pt', "wb") as f:
+        torch.save(new_test_noise, f)
 
     train_loader = torch.utils.data.DataLoader(mnist_train, batch_size=batch_size, shuffle=True)
-    test_loader = torch.utils.data.DataLoader(minst_test, batch_size=batch_size)
+    test_loader = torch.utils.data.DataLoader(mnist_test, batch_size=batch_size)
 
     return train_loader, test_loader, new_train_noise, new_test_noise
 
