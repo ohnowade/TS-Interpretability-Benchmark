@@ -1,0 +1,3 @@
+Train Transformer with 10 layers
+****************************************************************************************************
+Start the training of Transformer

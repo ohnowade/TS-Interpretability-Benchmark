@@ -1,0 +1,100 @@
+Train Transformer with 10 layers
+****************************************************************************************************
+Start the training of Transformer
+Train Epoch: 1 [6400/118810 (5%)]	Loss: 0.383695
+Train Epoch: 1 [12800/118810 (11%)]	Loss: 0.154782
+Train Epoch: 1 [19200/118810 (16%)]	Loss: 0.115423
+Train Epoch: 1 [25600/118810 (22%)]	Loss: 0.088952
+Train Epoch: 1 [32000/118810 (27%)]	Loss: 0.086267
+Train Epoch: 1 [38400/118810 (32%)]	Loss: 0.085490
+Train Epoch: 1 [44800/118810 (38%)]	Loss: 0.080899
+Train Epoch: 1 [51200/118810 (43%)]	Loss: 0.066527
+Train Epoch: 1 [57600/118810 (48%)]	Loss: 0.066766
+Train Epoch: 1 [64000/118810 (54%)]	Loss: 0.066706
+Train Epoch: 1 [70400/118810 (59%)]	Loss: 0.058320
+Train Epoch: 1 [76800/118810 (65%)]	Loss: 0.057019
+Train Epoch: 1 [83200/118810 (70%)]	Loss: 0.057768
+Train Epoch: 1 [89600/118810 (75%)]	Loss: 0.050032
+Train Epoch: 1 [96000/118810 (81%)]	Loss: 0.057685
+Train Epoch: 1 [102400/118810 (86%)]	Loss: 0.051005
+Train Epoch: 1 [108800/118810 (92%)]	Loss: 0.047365
+Train Epoch: 1 [115200/118810 (97%)]	Loss: 0.055038
+Train Accuracy: 114965/118810 (96.76%)
+
+
+Test set: Average loss: 0.0554001026, Accuracy: 19781/20120 (98.32%)
+
+Saved as ../Models/m_model_Transformer_NumClasses_2.pt
+Train Epoch: 2 [6400/118810 (5%)]	Loss: 0.053059
+Train Epoch: 2 [12800/118810 (11%)]	Loss: 0.041173
+Train Epoch: 2 [19200/118810 (16%)]	Loss: 0.050886
+Train Epoch: 2 [25600/118810 (22%)]	Loss: 0.046483
+Train Epoch: 2 [32000/118810 (27%)]	Loss: 0.034480
+Train Epoch: 2 [38400/118810 (32%)]	Loss: 0.042823
+Train Epoch: 2 [44800/118810 (38%)]	Loss: 0.040632
+Train Epoch: 2 [51200/118810 (43%)]	Loss: 0.043804
+Train Epoch: 2 [57600/118810 (48%)]	Loss: 0.045163
+Train Epoch: 2 [64000/118810 (54%)]	Loss: 0.040913
+Train Epoch: 2 [70400/118810 (59%)]	Loss: 0.037831
+Train Epoch: 2 [76800/118810 (65%)]	Loss: 0.034628
+Train Epoch: 2 [83200/118810 (70%)]	Loss: 0.037036
+Train Epoch: 2 [89600/118810 (75%)]	Loss: 0.046783
+Train Epoch: 2 [96000/118810 (81%)]	Loss: 0.029200
+Train Epoch: 2 [102400/118810 (86%)]	Loss: 0.040567
+Train Epoch: 2 [108800/118810 (92%)]	Loss: 0.052629
+Train Epoch: 2 [115200/118810 (97%)]	Loss: 0.033373
+Train Accuracy: 117062/118810 (98.53%)
+
+
+Test set: Average loss: 0.0374481900, Accuracy: 19848/20120 (98.65%)
+
+Saved as ../Models/m_model_Transformer_NumClasses_2.pt
+Train Epoch: 3 [6400/118810 (5%)]	Loss: 0.035853
+Train Epoch: 3 [12800/118810 (11%)]	Loss: 0.036362
+Train Epoch: 3 [19200/118810 (16%)]	Loss: 0.027505
+Train Epoch: 3 [25600/118810 (22%)]	Loss: 0.026766
+Train Epoch: 3 [32000/118810 (27%)]	Loss: 0.039777
+Train Epoch: 3 [38400/118810 (32%)]	Loss: 0.033216
+Train Epoch: 3 [44800/118810 (38%)]	Loss: 0.035106
+Train Epoch: 3 [51200/118810 (43%)]	Loss: 0.030245
+Train Epoch: 3 [57600/118810 (48%)]	Loss: 0.035923
+Train Epoch: 3 [64000/118810 (54%)]	Loss: 0.033960
+Train Epoch: 3 [70400/118810 (59%)]	Loss: 0.034064
+Train Epoch: 3 [76800/118810 (65%)]	Loss: 0.022960
+Train Epoch: 3 [83200/118810 (70%)]	Loss: 0.026641
+Train Epoch: 3 [89600/118810 (75%)]	Loss: 0.030272
+Train Epoch: 3 [96000/118810 (81%)]	Loss: 0.030985
+Train Epoch: 3 [102400/118810 (86%)]	Loss: 0.028133
+Train Epoch: 3 [108800/118810 (92%)]	Loss: 0.026039
+Train Epoch: 3 [115200/118810 (97%)]	Loss: 0.023787
+Train Accuracy: 117506/118810 (98.90%)
+
+
+Test set: Average loss: 0.0347725113, Accuracy: 19882/20120 (98.82%)
+
+Saved as ../Models/m_model_Transformer_NumClasses_2.pt
+Train Epoch: 4 [6400/118810 (5%)]	Loss: 0.029577
+Train Epoch: 4 [12800/118810 (11%)]	Loss: 0.025307
+Train Epoch: 4 [19200/118810 (16%)]	Loss: 0.024987
+Train Epoch: 4 [25600/118810 (22%)]	Loss: 0.028649
+Train Epoch: 4 [32000/118810 (27%)]	Loss: 0.025813
+Train Epoch: 4 [38400/118810 (32%)]	Loss: 0.019916
+Train Epoch: 4 [44800/118810 (38%)]	Loss: 0.030399
+Train Epoch: 4 [51200/118810 (43%)]	Loss: 0.028862
+Train Epoch: 4 [57600/118810 (48%)]	Loss: 0.022282
+Train Epoch: 4 [64000/118810 (54%)]	Loss: 0.029439
+Train Epoch: 4 [70400/118810 (59%)]	Loss: 0.025144
+Train Epoch: 4 [76800/118810 (65%)]	Loss: 0.022382
+Train Epoch: 4 [83200/118810 (70%)]	Loss: 0.027773
+Train Epoch: 4 [89600/118810 (75%)]	Loss: 0.022264
+Train Epoch: 4 [96000/118810 (81%)]	Loss: 0.022613
+Train Epoch: 4 [102400/118810 (86%)]	Loss: 0.016893
+Train Epoch: 4 [108800/118810 (92%)]	Loss: 0.023834
+Train Epoch: 4 [115200/118810 (97%)]	Loss: 0.017176
+Train Accuracy: 117770/118810 (99.12%)
+
+
+Test set: Average loss: 0.0240205478, Accuracy: 19959/20120 (99.20%)
+
+Saved as ../Models/m_model_Transformer_NumClasses_2.pt
+Total training time: 332.82 seconds, Average training time per epoch: 8.32 seconds
