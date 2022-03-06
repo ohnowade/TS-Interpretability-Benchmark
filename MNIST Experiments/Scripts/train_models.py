@@ -3,7 +3,7 @@ from torch.autograd import Variable
 import torch.optim as optim
 import torch.nn.functional as F
 import sys, os
-from utils import get_mixed_data
+from utils import get_mixed_data, data_generator_random, data_generator_random_0_2
 from model import Transformer,TCN,LSTMWithInputCellAttention,LSTM
 import numpy as np
 import argparse
@@ -16,7 +16,7 @@ models=["Transformer"]
 def main(args):
 	print('Train Transformer with {} layers'.format(args.n_layers))
 
-	sys.stdout = open('../Models/train_{}_layer_result.txt'.format(args.n_layers), 'w')
+	sys.stdout = open('../Models/train_{}_layer_new_result.txt'.format(args.n_layers), 'w')
 
 	print('Train Transformer with {} layers'.format(args.n_layers))
 
@@ -77,7 +77,65 @@ def main(args):
 	sys.stdout.close()
 
 
+def start_random_train(args):
+	print('Train Transformer with {} layers'.format(args.n_layers))
 
+	sys.stdout = open('../Models/results/train_{}_layer_{}_classes_result.txt'.format(args.n_layers, args.n_classes), 'w')
+
+	print('Train Transformer with {} layers'.format(args.n_layers))
+
+	torch.manual_seed(args.seed)
+
+	train_loader, test_loader, train_noise, test_noise = data_generator_random_0_2(args.batch_size)
+
+	for m in range(len(models)):
+		print("*" * 100)
+		print("Start the training of {}".format(models[m]))
+
+		if (models[m] == "Transformer"):
+
+			model = Transformer(args.NumFeatures, args.NumTimeSteps, args.n_layers, args.heads, args.dropout,
+								args.n_classes, time=args.NumTimeSteps)
+
+		elif (models[m] == "TCN"):
+			channel_sizes = [args.nhid] * args.levels
+			model = TCN(args.NumFeatures, args.n_classes, channel_sizes, kernel_size=args.ksize, dropout=args.dropout)
+		elif (models[m] == "LSTMWithInputCellAttention"):
+			model = LSTMWithInputCellAttention(args.NumFeatures, args.nhid, args.n_classes, args.dropout,
+											   args.attention_hops, args.d_a)
+		elif (models[m] == "LSTM"):
+			model = LSTM(args.NumFeatures, args.nhid, args.n_classes, args.dropout)
+
+		model.to(device)
+		model_name = "model_{}_NumClasses_{}".format(models[m], args.n_classes)
+
+		model_filename = args.model_dir + 'm_' + model_name + '.pt'
+
+		lr = args.lr
+		optimizer = getattr(optim, args.optim)(model.parameters(), lr=lr)
+
+		epoch_time_sum = 0
+
+		best_test_loss = 100
+		start_time = time.time()
+		for epoch in range(1, args.epochs + 1):
+			model, optimizer = train(args, epoch, model, train_loader, optimizer)
+			test_loss, test_acc = test(args, model, test_loader)
+			if (test_loss < best_test_loss):
+				best_test_loss = test_loss
+				save(model, model_filename)
+			if (test_acc >= 99):
+				break
+			if epoch % 10 == 0:
+				lr /= 10
+				for param_group in optimizer.param_groups:
+					param_group['lr'] = lr
+		end_time = time.time()
+		total_time = end_time - start_time
+		time_message = ("Total training time: {:.2f} seconds, Average training time per epoch: {:.2f} seconds"
+						.format(total_time, total_time / args.epochs))
+		print(time_message)
+	sys.stdout.close()
 
 
 def save(model, save_filename):
@@ -101,7 +159,7 @@ def train(args,ep,model,train_loader,optimizer):
 		output = model(data)
 		pred = output.data.max(1, keepdim=True)[1]
 		correct += pred.eq(target.data.view_as(pred)).cpu().sum()
-		loss = F.nll_loss(output, target)
+		loss = F.cross_entropy(output, target)
 		loss.backward()
 		if args.clip > 0:
 			torch.nn.utils.clip_grad_norm_(model.parameters(), args.clip)
@@ -196,4 +254,4 @@ def parse_arguments(argv):
 	return  parser.parse_args()
 
 if __name__ == '__main__':
-	main(parse_arguments(sys.argv[1:]))
+	start_random_train(parse_arguments(sys.argv[1:]))
