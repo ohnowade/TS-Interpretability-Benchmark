@@ -137,7 +137,7 @@ def get_mixed_data(batch_size):
     return mnist_train_dl, mnist_test_dl, mnist_train_noise, mnist_test_noise
 
 
-def data_generator_random_0_2(batch_size):
+def data_generator_random_0_2(batch_size, shuffle=True):
     if (os.path.exists('../Data/MIXED/random_2_classes_train_dataset.pt') and
         os.path.exists('../Data/MIXED/random_2_classes_test_dataset.pt') and
         os.path.exists('../Data/MIXED/random_2_classes_train_noise.pt') and
@@ -147,7 +147,7 @@ def data_generator_random_0_2(batch_size):
         train_noise = torch.load(open('../Data/MIXED/random_2_classes_train_noise.pt', 'rb'))
         test_noise = torch.load(open('../Data/MIXED/random_2_classes_test_noise.pt', 'rb'))
 
-        train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True)
+        train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=shuffle)
         test_loader = torch.utils.data.DataLoader(test_set, batch_size=batch_size)
 
         return train_loader, test_loader, train_noise, test_noise
@@ -238,13 +238,13 @@ def data_generator_random_0_2(batch_size):
     with open('../Data/MIXED/random_2_classes_test_noise.pt', "wb") as f:
         torch.save(new_test_noise, f)
 
-    train_loader = torch.utils.data.DataLoader(mnist_train, batch_size=batch_size, shuffle=True)
+    train_loader = torch.utils.data.DataLoader(mnist_train, batch_size=batch_size, shuffle=shuffle)
     test_loader = torch.utils.data.DataLoader(mnist_test, batch_size=batch_size)
 
     return train_loader, test_loader, new_train_noise, new_test_noise
 
 
-def data_generator_random(batch_size):
+def data_generator_random(batch_size, shuffle=True):
     if (os.path.exists('../Data/MIXED/random_10_classes_train_dataset.pt') and
         os.path.exists('../Data/MIXED/random_10_classes_test_dataset.pt') and
         os.path.exists('../Data/MIXED/random_10_classes_train_noise.pt') and
@@ -254,7 +254,7 @@ def data_generator_random(batch_size):
         train_noise = torch.load(open('../Data/MIXED/random_10_classes_train_noise.pt', 'rb'))
         test_noise = torch.load(open('../Data/MIXED/random_10_classes_test_noise.pt', 'rb'))
 
-        train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True)
+        train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=shuffle)
         test_loader = torch.utils.data.DataLoader(test_set, batch_size=batch_size)
 
         return train_loader, test_loader, train_noise, test_noise
@@ -334,7 +334,7 @@ def data_generator_random(batch_size):
     with open('../Data/MIXED/random_10_classes_test_noise.pt', "wb") as f:
         torch.save(new_test_noise, f)
 
-    train_loader = torch.utils.data.DataLoader(mnist_train, batch_size=batch_size, shuffle=True)
+    train_loader = torch.utils.data.DataLoader(mnist_train, batch_size=batch_size, shuffle=shuffle)
     test_loader = torch.utils.data.DataLoader(mnist_test, batch_size=batch_size)
 
     return train_loader, test_loader, new_train_noise, new_test_noise
