@@ -123,6 +123,32 @@ def find_important_rows(model, image, label, device, cols, n_row):
 
     return important_rows
 
+def find_important_joint_rows(model, image, label, device, cols, n_rows):
+    important_rows = []
+    for col in cols:
+        available_rows = [i for i in range(28)]
+        chosen_rows = []
+        prev_best_score = 0
+        scores = []
+        for n_row in range(n_rows):
+            best_row = None
+            best_score = float('-inf')
+            for row in available_rows:
+                _, score = attack(model, image, label, device, att_col=[col], att_row = chosen_rows+[row])
+                score = score.item()
+                if score < 0:
+                    print(score)
+                if score > best_score:
+                    best_row = row
+                    best_score = score
+            chosen_rows.append(best_row)
+            available_rows.remove(best_row)
+            scores.append(best_score - prev_best_score)
+            prev_best_score = best_score
+        important_rows.append(chosen_rows)
+
+    return important_rows
+
 def mark_important_features(image, label, noise, x, y, ax1, ax2):
     ax1.imshow(image, cmap='gray')
     ax1.set_title('Data Image, Label: {}, Noise:{}'.format(label, noise))
@@ -135,6 +161,7 @@ def visualize_important_columns(column_importance, ax):
     for i in range(0, 28):
         rs[:, i] = np.array([column_importance[i]] * 28)
     sns.heatmap(rs, square=True, ax=ax)
+    ax.set_title('Heat map of column importance')
 
 
 def start_attack(index, n_classes, n_cols, n_rows):
@@ -146,7 +173,12 @@ def start_attack(index, n_classes, n_cols, n_rows):
         model = torch.load(open('../Models/m_model_Transformer_NumClasses_10.pt', 'rb'), map_location=device)
         train_loader, test_loader, train_noise, test_noise = data_generator_random(256, shuffle=False)
 
-    images, labels = next(iter(train_loader))
+    batch = 0
+    for images, labels in train_loader:
+        if batch == 300:
+            break
+        batch += 1
+
     image = images[index]
     label = labels[index]
     noise = train_noise[index]
@@ -160,7 +192,7 @@ def start_attack(index, n_classes, n_cols, n_rows):
     cols, score = find_important_joint_colunms(model, image, label, device, n_cols)
     print('Important columns are: {}'.format(cols))
     print('With Scores: {}'.format(score))
-    rows = find_important_rows(model, image, label, device, cols, n_rows)
+    rows = find_important_joint_rows(model, image, label, device, cols, n_rows)
     print('Important rows are: {}'.format(rows))
 
     x = []
@@ -177,8 +209,9 @@ def start_attack(index, n_classes, n_cols, n_rows):
     visualize_important_columns(column_importance, ax3)
     fig.tight_layout()
 
+    plt.savefig('image_{}_{}_classes_{}_cols_{}_rows_attak.png'.format(index, n_classes, n_cols, n_rows), bbox_inches='tight')
     plt.show()
 
 if __name__ == '__main__':
-    start_attack(index=0, n_classes=2, n_cols=8, n_rows=8)
+    start_attack(index=7, n_classes=2, n_cols=8, n_rows=8)
 

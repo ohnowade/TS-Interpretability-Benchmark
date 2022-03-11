@@ -341,16 +341,17 @@ def data_generator_random(batch_size, shuffle=True):
 
 
 def visualize_data(dl, num, noise):
+    classes = [0, 2]
     for images, labels in dl:
-        print(images.type())
-        print(images.shape)
-        print(labels[0].type())
-        print(labels.shape)
-        # for i in range(num):
-        #     plt.imshow(images[i], cmap='gray')
-        #     plt.title(f"Label(Even):{labels[i]} Noise(Odd):{noise[i]}")
-        #     plt.show()
-        break
+        for i in range(256):
+            if num == 0:
+                return
+            if labels[i] == 0:
+                continue
+            plt.imshow(images[i], cmap='gray')
+            plt.title(f"Label(Even):{classes[labels[i]]} Noise(Odd):{noise[i]}")
+            plt.show()
+            num -= 1
 
 
 def visualize(dl, num):
@@ -363,8 +364,6 @@ def visualize(dl, num):
         break
 
 if __name__ == '__main__':
-    train_dl, test_dl, train_noise, test_noise = data_generator_random(256)
-    visualize_data(train_dl, 10, train_noise)
-    train_dl, test_dl, train_noise, test_noise = get_mixed_data(256)
+    train_dl, test_dl, train_noise, test_noise = data_generator_random_0_2(256, False)
     visualize_data(train_dl, 10, train_noise)
 
